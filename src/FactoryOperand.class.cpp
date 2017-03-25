@@ -6,7 +6,7 @@
 /*   By: kperreau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/25 19:44:25 by kperreau          #+#    #+#             */
-/*   Updated: 2017/03/25 20:28:25 by kperreau         ###   ########.fr       */
+/*   Updated: 2017/03/25 21:11:40 by kperreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ FactoryOperand const & FactoryOperand::operator=(FactoryOperand const & rhs)
 
 IOperand const * FactoryOperand::createOperand(eOperandType type, std::string const & value) const
 {
-	return((*this->create[type])(value));
+	return((this->create.at(type))(value));
 }
 
 FactoryOperand::~FactoryOperand(void)
