@@ -6,7 +6,7 @@
 /*   By: kperreau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/11 18:22:36 by kperreau          #+#    #+#             */
-/*   Updated: 2017/03/11 20:52:14 by kperreau         ###   ########.fr       */
+/*   Updated: 2017/03/25 20:34:56 by kperreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ enum	eOperandType {
 
 class IOperand {
 	public:
-		virtual int getPrecision( void ) const = 0; // Precision of the type of the instance
+/*		virtual int getPrecision( void ) const = 0; // Precision of the type of the instance
 		virtual eOperandType getType( void ) const = 0; // Type of the instance
 		virtual IOperand const * operator+( IOperand const & rhs ) const = 0; // Sum
 		virtual IOperand const * operator-( IOperand const & rhs ) const = 0; // Difference
@@ -32,7 +32,7 @@ class IOperand {
 		virtual IOperand const * operator/( IOperand const & rhs ) const = 0; // Quotient
 		virtual IOperand const * operator%( IOperand const & rhs ) const = 0; // Modulo
 		virtual std::string const & toString( void ) const = 0; // String representation of the instance
-		virtual ~IOperand( void ) {};
+*/		virtual ~IOperand( void ) {};
 };
 
 #endif

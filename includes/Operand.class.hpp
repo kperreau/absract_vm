@@ -6,7 +6,7 @@
 /*   By: kperreau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/11 18:22:45 by kperreau          #+#    #+#             */
-/*   Updated: 2017/03/11 20:59:12 by kperreau         ###   ########.fr       */
+/*   Updated: 2017/03/25 19:23:49 by kperreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include "FactoryOperand.class.hpp"
 
 template <typename T>
-class Operand //: public IOperand
+class Operand : public IOperand
 {
 	public:
 		Operand(void){};

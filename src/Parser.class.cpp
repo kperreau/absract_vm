@@ -1,33 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Operand.class.cpp                                  :+:      :+:    :+:   */
+/*   Parser.class.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kperreau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/11 18:22:14 by kperreau          #+#    #+#             */
-/*   Updated: 2017/03/25 20:34:33 by kperreau         ###   ########.fr       */
+/*   Created: 2017/03/25 16:45:41 by kperreau          #+#    #+#             */
+/*   Updated: 2017/03/25 19:13:24 by kperreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Operand.class.hpp"
-#include "FactoryOperand.class.hpp"
+#include "Parser.class.hpp"
 
-Operand::Operand(void)
+Parser::Parser(void)
 {
 	std::cout << "Default constructor called." << std::endl;
 	
 	return ;
 }
 
-Operand::Operand(eOperandType type, std::string const & value)
+Parser::Parser(std::string const & str) : _str(str)
 {
+	std::string			line;
+	std::regex			comments("[ \t]*;");
+	std::istringstream 	ctx(str);
+
 	std::cout << "Parameter constructor called." << std::endl;
-	
+	while (std::getline(ctx, line))
+	{
+		if (line.find(";") != std::string::npos)
+			line.erase(line.find(";"));
+		if (regex_match(line, comments))
+			std::cout << "Commentaire" << std::endl;
+	}	
 	return ;
 }
 
-Operand::Operand(Operand const & src)
+Parser::Parser(Parser const & src)
 {
 	std::cout << "Copy constructor called." << std::endl;
 	*this = src;
@@ -35,15 +44,9 @@ Operand::Operand(Operand const & src)
 	return ;
 }
 
-Operand::~Operand(void)
+Parser::~Parser(void)
 {
 	std::cout << "Destructor called." << std::endl;
 	
 	return ;
-}
-
-std::ostream &		operator<<(std::ostream & o, Operand const & i)
-{
-	
-	return (o);
 }

@@ -6,7 +6,7 @@
 /*   By: kperreau <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/03/11 18:20:23 by kperreau          #+#    #+#             */
-/*   Updated: 2017/03/11 20:51:57 by kperreau         ###   ########.fr       */
+/*   Updated: 2017/03/25 20:18:22 by kperreau         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ class FactoryOperand
 {
 	public:
 		FactoryOperand(void);
-		FactoryOperand(eOperandType type, std::string const & value);
 		FactoryOperand(FactoryOperand const & src);
 		FactoryOperand const & operator=(FactoryOperand const & rhs);
 		IOperand const * createOperand(eOperandType type, std::string const & value) const;
@@ -33,7 +32,7 @@ class FactoryOperand
 		IOperand const * createFloat( std::string const & value ) const;
 		IOperand const * createDouble( std::string const & value ) const;
 		
-		std::map<FactoryOperand, IOperand const * (FactoryOperand::*)(std::string const & value) const> create;
+		std::map<eOperandType, IOperand const * (FactoryOperand::*)(std::string const & value) const> create;
 };
 
 std::ostream &		operator<<(std::ostream & o, FactoryOperand const & i);

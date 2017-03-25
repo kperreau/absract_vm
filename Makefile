@@ -6,7 +6,7 @@
 #    By: kperreau <kperreau@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/12/05 14:10:51 by kperreau          #+#    #+#              #
-#    Updated: 2017/03/11 20:51:45 by kperreau         ###   ########.fr        #
+#    Updated: 2017/03/25 19:49:14 by kperreau         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,13 +22,14 @@ INCLUDESDIR = includes
 
 MAIN = main.cpp
 
-CFILES = #Operand.class.cpp
+CFILES = Parser.class.cpp FactoryOperand.class.cpp
 
 SRC = $(patsubst %, $(SRCDIR)/%, $(CFILES))
 
 OBJ = $(SRC:.cpp=.o) $(MAIN:.cpp=.o)
 
-HFILES = IOperand.class.hpp Operand.class.hpp FactoryOperand.class.hpp
+HFILES = IOperand.class.hpp Operand.class.hpp FactoryOperand.class.hpp \
+	Parser.class.hpp
 
 HEADERS = $(patsubst %, $(INCLUDESDIR)/%, $(HFILES))
 
