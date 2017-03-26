@@ -17,8 +17,6 @@ Parser::Parser(std::string const & str) : _str(str)
 	std::string			line;
 	std::string			instruction;
 	std::smatch			match;
-	// std::regex			push("(\\+|-)?[[:digit:]]+");
-	// std::regex			push("^[ \t]*+push[ \t](int|double|float)$");
 	std::regex			trim("^[ \t]*([^ \t]+)[ \t]*([^ \t]*)");
 	std::istringstream 	ctx(str);
 
@@ -45,7 +43,6 @@ Parser::Parser(std::string const & str) : _str(str)
 
 Parser::Parser(Parser const & src)
 {
-	// std::cout << "Copy constructor called." << std::endl;
 	*this = src;
 	
 	return ;
@@ -53,8 +50,6 @@ Parser::Parser(Parser const & src)
 
 Parser::~Parser(void)
 {
-	// std::cout << "Destructor called." << std::endl;
-	
 	return ;
 }
 
@@ -62,7 +57,6 @@ void					Parser::_push(std::string const & value)
 {
 	IOperand const *	val;
 
-	// std::cout << "push" << std::endl;
 	val = this->_check_value(value);
 	if (val != NULL)
 		this->_stack.push_font(val);
@@ -97,7 +91,6 @@ void					Parser::_dump(std::string const & value)
 {
 	std::list<IOperand const *>::iterator	it;
 
-	// std::cout << "dump" << std::endl;
 	for (it = this->_stack.begin(); it != this->_stack.end(); it++)
 		std::cout << (*it)->toString() << std::endl;
 	return ;

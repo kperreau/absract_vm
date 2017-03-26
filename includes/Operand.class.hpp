@@ -41,7 +41,7 @@ class Operand : public IOperand
 		Operand(Operand const & src){};
 		~Operand(void){};
 
-		int getPrecision( void ){}; // Precision of the type of the instance
+		int getPrecision( void ){};
 
 		eOperandType			getType( void )
 		{
