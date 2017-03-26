@@ -15,21 +15,17 @@
 
 FactoryOperand::FactoryOperand(void)
 {
-	this->create[Int8] = &FactoryOperand::createInt8;
-	this->create[Int16] = &FactoryOperand::createInt16;
-	this->create[Int32] = &FactoryOperand::createInt32;
-	this->create[Float] = &FactoryOperand::createFloat;
-	this->create[Double] = &FactoryOperand::createDouble;
+	this->_create[Int8] = &FactoryOperand::createInt8;
+	this->_create[Int16] = &FactoryOperand::createInt16;
+	this->_create[Int32] = &FactoryOperand::createInt32;
+	this->_create[Float] = &FactoryOperand::createFloat;
+	this->_create[Double] = &FactoryOperand::createDouble;
 	return ;
 }
 
 FactoryOperand::FactoryOperand(FactoryOperand const & src)
 {
-	this->create[Int8] = &FactoryOperand::createInt8;
-	this->create[Int16] = &FactoryOperand::createInt16;
-	this->create[Int32] = &FactoryOperand::createInt32;
-	this->create[Float] = &FactoryOperand::createFloat;
-	this->create[Double] = &FactoryOperand::createDouble;
+	*this = src;
 	return ;
 }
 
@@ -40,7 +36,7 @@ FactoryOperand const & FactoryOperand::operator=(FactoryOperand const & rhs)
 
 IOperand const * FactoryOperand::createOperand(eOperandType type, std::string const & value) const
 {
-	return((this->create.at(type))(value));
+	return((*this.*(_create.at(type)))(value));
 }
 
 FactoryOperand::~FactoryOperand(void)

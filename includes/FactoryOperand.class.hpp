@@ -32,7 +32,7 @@ class FactoryOperand
 		IOperand const * createFloat( std::string const & value ) const;
 		IOperand const * createDouble( std::string const & value ) const;
 		
-		std::map<eOperandType, IOperand const * (FactoryOperand::*)(std::string const & value) const> create;
+		std::map<eOperandType, IOperand const * (FactoryOperand::*)(std::string const & value) const> _create;
 };
 
 std::ostream &		operator<<(std::ostream & o, FactoryOperand const & i);

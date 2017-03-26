@@ -22,7 +22,7 @@ INCLUDESDIR = includes
 
 MAIN = main.cpp
 
-CFILES = Parser.class.cpp FactoryOperand.class.cpp
+CFILES = FactoryOperand.class.cpp Parser.class.cpp
 
 SRC = $(patsubst %, $(SRCDIR)/%, $(CFILES))
 

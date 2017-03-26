@@ -16,6 +16,7 @@
 # include "FactoryOperand.class.hpp"
 # include <iostream>
 # include <string>
+# include <list>
 # include <stack>
 # include <regex>
 # include <sstream>
@@ -23,16 +24,26 @@
 class Parser
 {
 	public:
-		Parser(void);
 		Parser(std::string const & str);
 		Parser(Parser const & src);
 		//Parser const & operator=(Parser const & rhs);
+		
 		~Parser(void);
 
 	private:
-		std::string						_str;
-		std::stack<IOperand const *>	_stack;
+		void				_push(std::string const & value);
+		void				_add(std::string const & value);
+		void				_pop(std::string const & value);
+		void				_exit(std::string const & value);
+		void				_dump(std::string const & value);
+		void				_print(std::string const & value);
+		IOperand const *	_check_value(std::string const & value);
 		
+		std::string						_str;
+		std::list<IOperand const *>		_stack;
+		FactoryOperand					_factory;
+		
+		std::map<std::string, void (Parser::*)(std::string const & value)> _instruction;
 };
 
 std::ostream &		operator<<(std::ostream & o, Parser const & i);

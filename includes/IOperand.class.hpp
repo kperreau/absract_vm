@@ -13,6 +13,7 @@
 #ifndef IOPERAND_CLASS_HPP
 # define IOPERAND_CLASS_HPP
 # include <iostream>
+# include <string>
 
 enum	eOperandType {
 	Int8,
@@ -31,8 +32,9 @@ class IOperand {
 		virtual IOperand const * operator*( IOperand const & rhs ) const = 0; // Product
 		virtual IOperand const * operator/( IOperand const & rhs ) const = 0; // Quotient
 		virtual IOperand const * operator%( IOperand const & rhs ) const = 0; // Modulo
+		*/
 		virtual std::string const & toString( void ) const = 0; // String representation of the instance
-*/		virtual ~IOperand( void ) {};
+		virtual ~IOperand( void ) {};
 };
 
 #endif

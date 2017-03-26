@@ -14,6 +14,7 @@
 #include "FactoryOperand.class.hpp"
 #include "Parser.class.hpp"
 #include <fstream>
+#include <regex>
 
 int		main(int argc, char **argv)
 {
@@ -32,19 +33,19 @@ int		main(int argc, char **argv)
 			input.append(line + "\n");
 		file.close();
 		Parser	parsed(input);
-		//std::cout << input;
 		
 	}
 	else if (argc == 1 && fileno(stdin) != -1)
 	{
-       	while (std::getline(std::cin, line))
+		std::regex	end("^[ \t]*;;[ \t]*$");
+		
+		while (std::getline(std::cin, line))
 		{
-			if (line.find(";;") != std::string::npos)
+			if (regex_match(line, end))
 				break ;
 			input.append(line + "\n");
 		}
 		Parser	parsed(input);
-		//std::cout << input;
 	}
 	else
 	{

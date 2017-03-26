@@ -22,13 +22,29 @@ class Operand : public IOperand
 {
 	public:
 		Operand(void){};
-		Operand(eOperandType type, std::string const & value){};
+		Operand(eOperandType type, std::string const & value) : _type(type)
+		{
+			if (type == Int8)
+				this->_value = static_cast<char>(std::stoi(value));
+			else if (type == Int16)
+				this->_value = static_cast<short int>(std::stoi(value));
+			else if (type == Int32)
+				this->_value = static_cast<int>(std::stoi(value));
+			else if (type == Float)
+				this->_value = static_cast<float>(std::stof(value));
+			else
+				this->_value = static_cast<double>(std::stod(value));
+			this->_str = std::to_string(this->_value);
+			return ;
+		}
+		
 		Operand(Operand const & src){};
 		~Operand(void){};
 
 		int getPrecision( void ){}; // Precision of the type of the instance
 
-		eOperandType			getType( void ){
+		eOperandType			getType( void )
+		{
 			
 		}
 
@@ -42,7 +58,9 @@ class Operand : public IOperand
 
 		IOperand const *		operator%( IOperand const & rhs ){}
 
-		std::string const &		toString( void ){
+		std::string const &		toString(void) const
+		{
+			return (this->_str);
 		}
 		
 	private:
@@ -53,6 +71,10 @@ class Operand : public IOperand
 		std::string				_str;
 };
 
-//std::ostream &		operator<<(std::ostream & o, Operand const & i);
+// std::ostream &		operator<<(std::ostream & o, IOperand const & i)
+// {
+	// o << i.<< stdn::endl;
+	// return ();
+// }
 
 #endif
