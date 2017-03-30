@@ -46,25 +46,25 @@ FactoryOperand::~FactoryOperand(void)
 
 IOperand const * FactoryOperand::createInt8(std::string const & value) const
 {
-	return (new Operand<char>(Int8, value));
+	return (new Operand<char>(Int8, value, 0, this));
 }
 
 IOperand const * FactoryOperand::createInt16(std::string const & value) const
 {
-	return (new Operand<short int>(Int16, value));
+	return (new Operand<short int>(Int16, value, 0, this));
 }
 
 IOperand const * FactoryOperand::createInt32(std::string const & value) const
 {
-	return (new Operand<int>(Int32, value));
+	return (new Operand<int>(Int32, value, 0, this));
 }
 
 IOperand const * FactoryOperand::createFloat(std::string const & value) const
 {
-	return (new Operand<float>(Float, value));
+	return (new Operand<float>(Float, value, 2, this));
 }
 
 IOperand const * FactoryOperand::createDouble(std::string const & value) const
 {
-	return (new Operand<double>(Double, value));
+	return (new Operand<double>(Double, value, 4, this));
 }
