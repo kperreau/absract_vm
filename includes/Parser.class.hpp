@@ -53,6 +53,7 @@ class Parser
 		int								_isExit;
 		
 		std::map<std::string, void (Parser::*)(std::string const & value)> _instruction;
+		std::map<std::string, enum eOperandType> _type;
 };
 
 std::ostream &		operator<<(std::ostream & o, Parser const & i);

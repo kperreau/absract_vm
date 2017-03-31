@@ -34,6 +34,12 @@ Parser::Parser(std::string const & str)
 	this->_instruction["dump"] = &Parser::_dump;
 	this->_instruction["assert"] = &Parser::_assert;
 
+	this->_type["int8"] = Int8;
+	this->_type["int16"] = Int16;
+	this->_type["int32"] = Int32;
+	this->_type["float"] = Float;
+	this->_type["double"] = Double;
+
 	while (std::getline(ctx, line))
 	{
 		if (this->_isExit)
@@ -99,7 +105,7 @@ void					Parser::_add(std::string const & value)
 		return ;
 	}
 	++it2;
-	add = **it1 + **it2;
+	add = **it2 + **it1;
 	delete this->_stack.front();
 	this->_stack.pop_front();
 	delete this->_stack.front();
@@ -126,7 +132,7 @@ void					Parser::_sub(std::string const & value)
 		return ;
 	}
 	++it2;
-	sub = **it1 - **it2;
+	sub = **it2 - **it1;
 	delete this->_stack.front();
 	this->_stack.pop_front();
 	delete this->_stack.front();
@@ -153,7 +159,7 @@ void					Parser::_mul(std::string const & value)
 		return ;
 	}
 	++it2;
-	sub = **it1 * **it2;
+	sub = **it2 * **it1;
 	delete this->_stack.front();
 	this->_stack.pop_front();
 	delete this->_stack.front();
@@ -180,7 +186,7 @@ void					Parser::_div(std::string const & value)
 		return ;
 	}
 	++it2;
-	sub = **it1 / **it2;
+	sub = **it2 / **it1;
 	delete this->_stack.front();
 	this->_stack.pop_front();
 	delete this->_stack.front();
@@ -207,7 +213,7 @@ void					Parser::_mod(std::string const & value)
 		return ;
 	}
 	++it2;
-	sub = **it1 % **it2;
+	sub = **it2 % **it1;
 	delete this->_stack.front();
 	this->_stack.pop_front();
 	delete this->_stack.front();
@@ -270,7 +276,8 @@ void					Parser::_print(std::string const & value)
 		return ;
 	}
 	c = std::stoi(this->_stack.front()->toString());
-	std::cout << c << std::endl;
+	// std::cout << c << std::endl;
+	std::cout << c;
 	return ;
 }
 
@@ -348,20 +355,13 @@ IOperand const *		Parser::_check_value(std::string const & value)
 		std::cerr << "Line " << Parser::line << ": Bad value" << std::endl;
 		return (NULL);
 	}
-	
-	if (match_type[1].str() == "int8")
-		opType = Int8;
-	else if (match_type[1].str() == "int16")
-		opType = Int16;
-	else if (match_type[1].str() == "int32")
-		opType = Int32;
-	else if (match_type[1].str() == "float")
-		opType = Float;
+	if (this->_type.find(match_type[1].str()) != this->_type.end())
+		opType = this->_type[match_type[1].str()];
 	else
-		opType = Double;
-	
-	// std::cout << match_type[1].str() << std::endl;
-	// std::cout << match_number[1].str() << std::endl;
+	{
+		std::cerr << "Line " << Parser::line << ": Bad Type" << std::endl;
+		return (NULL);
+	}
 	
 	return (this->_factory.createOperand(opType, match_number[1].str()));
 }

@@ -30,16 +30,6 @@ class Operand : public IOperand
 		{
 			std::stringstream	ss;
 			std::regex			regex("0*$");
-			// if (type == Int8)
-				// this->_value = static_cast<char>(std::stoi(value));
-			// else if (type == Int16)
-				// this->_value = static_cast<short int>(std::stoi(value));
-			// else if (type == Int32)
-				// this->_value = static_cast<int>(std::stoi(value));
-			// else if (type == Float)
-				// this->_value = static_cast<float>(std::stof(value));
-			// else
-				// this->_value = static_cast<double>(std::stod(value));
 			if (type < Float)
 			{
 				this->_value = static_cast<T>(std::stoi(value));
@@ -50,7 +40,8 @@ class Operand : public IOperand
 			}
 			ss << std::fixed << std::setprecision(this->_precision) << +this->_value;
 			this->_str = regex_replace(ss.str(), regex, "");
-			// this->_str = ss.str();
+			if (this->_str == "")
+				this->_str = "0";
 			return ;
 		}
 
@@ -75,13 +66,6 @@ class Operand : public IOperand
 			return (this->_type);
 		}
 
-		// IOperand const &		operator=( IOperand const & rhs)
-		// {
-			// this->_type = rhs.getType();
-			// this->_str = rhs.toString();
-			// return (*this);
-		// }
-
 		IOperand const *		operator+(IOperand const & rhs) const
 		{
 			eOperandType		type;
@@ -93,15 +77,6 @@ class Operand : public IOperand
 			else
 				ss << std::stod(this->toString()) + std::stod(rhs.toString());
 			return (this->_factory->createOperand(type, ss.str()));
-			// else if (type == Int16)
-				// this->_value = static_cast<short int>(std::stoi(value));
-			// else if (type == Int32)
-				// this->_value = static_cast<int>(std::stoi(value));
-			// else if (type == Float)
-				// this->_value = static_cast<float>(std::stof(value));
-			// else
-				// this->_value = static_cast<double>(std::stod(value));
-			// return (new Operand<>(type, value));
 		}
 
 		IOperand const *		operator-(IOperand const & rhs) const
@@ -178,11 +153,5 @@ class Operand : public IOperand
 		FactoryOperand const *	_factory;
 		std::string				_str;
 };
-
-// std::ostream &		operator<<(std::ostream & o, IOperand const & i)
-// {
-	// o << std::to_string(i._value);
-	// return (o);
-// }
 
 #endif
