@@ -32,6 +32,7 @@ Parser::Parser(std::string const & str)
 	this->_instruction["exit"] = &Parser::_exit;
 	this->_instruction["print"] = &Parser::_print;
 	this->_instruction["dump"] = &Parser::_dump;
+	this->_instruction["assert"] = &Parser::_assert;
 
 	while (std::getline(ctx, line))
 	{
@@ -41,11 +42,19 @@ Parser::Parser(std::string const & str)
 			line.erase(line.find(";"));
 		// std::transform(line.begin(), line.end(), line.begin(), ::tolower);
 		
-		if (!std::regex_search(line, match, trim))
-			continue ;
-		if (this->_instruction.find(match[1].str()) != this->_instruction.end())
-			(*this.*(_instruction.at(match[1].str())))(match[2]);
+		if (std::regex_search(line, match, trim))
+		{
+			if (this->_instruction.find(match[1].str()) != this->_instruction.end())
+				(*this.*(_instruction.at(match[1].str())))(match[2]);
+			else
+				std::cerr << "Line " << Parser::line << ": Error: Unknown instruction" << std::endl;
+		}
 		++Parser::line;
+	}
+	if (!this->_isExit)
+	{
+		std::cerr << "Line " << Parser::line << ": Error: Missing exit instruction" << std::endl;
+		return ;
 	}
 	return ;
 }
@@ -286,18 +295,59 @@ void					Parser::_dump(std::string const & value)
 	return ;
 }
 
+void					Parser::_assert(std::string const & value)
+{
+	std::regex	check("[^ \t]+");
+	IOperand const *	val;
+
+	if (this->_stack.empty())
+	{
+		std::cerr << "Line " << Parser::line << ": Stack is empty." << std::endl;
+		return ;
+	}
+
+	val = this->_check_value(value);
+	if (this->_stack.front()->getType() != val->getType())
+	{
+		std::cerr << "Line " << Parser::line << ": Assert: Wrong type." << std::endl;
+		return ;
+	}
+	if (this->_stack.front()->toString() != val->toString())
+	{
+		std::cerr << "Line " << Parser::line << ": Assert: Wrong value." << std::endl;
+		return ;
+	}
+	return ;
+}
+
 IOperand const *		Parser::_check_value(std::string const & value)
 {
 	std::smatch		match_type;
 	std::smatch		match_number;
 	eOperandType	opType;
-	std::regex		type("^[ \t]*(int8|int16|int32|double|float)\\(([^ \t]*)\\)$");
+	std::regex		type("^[ \t]*(int8|int16|int32|double|float)\\([^ \t]*\\)[ \t]*([^ \t]*)");
 	std::regex		number("\\(((\\+|-)?[0-9]+(\\.(([[:digit:]]+)?))?)\\)");
 	
+	if (value.size() == 0)
+	{
+		std::cerr << "Line " << Parser::line << ": too few parameters" << std::endl;
+		return (NULL);
+	}
 	if (!std::regex_search(value, match_type, type))
+	{
+		std::cerr << "Line " << Parser::line << ": Unknown Type" << std::endl;
 		return (NULL);
+	}
+	else if (match_type[2].str().size() != 0)
+	{
+		std::cerr << "Line " << Parser::line << ": too much parameters" << std::endl;
+		return (NULL);
+	}
 	if (!std::regex_search(value, match_number, number))
+	{
+		std::cerr << "Line " << Parser::line << ": Bad value" << std::endl;
 		return (NULL);
+	}
 	
 	if (match_type[1].str() == "int8")
 		opType = Int8;

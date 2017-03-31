@@ -43,6 +43,7 @@ class Parser
 		void				_exit(std::string const & value);
 		void				_dump(std::string const & value);
 		void				_print(std::string const & value);
+		void				_assert(std::string const & value);
 		IOperand const *	_check_value(std::string const & value);
 		
 		std::string						_str;
