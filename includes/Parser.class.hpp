@@ -22,6 +22,11 @@
 # include <regex>
 # include <sstream>
 
+# define ANSI_COLOR_YELLOW "\x1b[33m"
+# define ANSI_COLOR_GREEN "\x1b[32m"
+# define ANSI_COLOR_CYAN "\x1b[36m"
+# define COLOR_RESET "\x1b[0m"
+
 class Parser
 {
 	public:
@@ -29,8 +34,8 @@ class Parser
 
 		Parser(std::string const & str);
 		Parser(Parser const & src);
-		//Parser const & operator=(Parser const & rhs);
-		
+		static bool		compare(IOperand const * first, IOperand const * second);
+		static bool		egal(IOperand const * first, IOperand const * second);
 		~Parser(void);
 
 	private:
@@ -46,6 +51,9 @@ class Parser
 		void				_print(std::string const & value);
 		void				_assert(std::string const & value);
 		void				_reset(std::string const & value);
+		void				_rev(std::string const & value);
+		void				_sort(std::string const & value);
+		void				_unique(std::string const & value);
 		IOperand const *	_check_value(std::string const & value);
 		
 		std::string						_str;

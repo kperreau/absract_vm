@@ -14,7 +14,6 @@
 # define MYEXCEPTION_HPP
 
 # include <stdexcept>
-# define ANSI_COLOR_YELLOW "\x1b[33m"
 
 class MyException : public std::invalid_argument, public std::overflow_error
 {
@@ -23,8 +22,8 @@ class MyException : public std::invalid_argument, public std::overflow_error
 		const MyException& operator=(const MyException & e);
 		virtual const char* what() const throw ()
 		{
-			return (_msg.c_str());
-		}
+			return (this->_msg.c_str());
+		};
 
 		virtual ~MyException() throw (){}
 

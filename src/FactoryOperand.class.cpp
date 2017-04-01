@@ -42,7 +42,7 @@ IOperand const * FactoryOperand::createOperand(eOperandType type, std::string co
 		op = (*this.*(_create.at(type)))(value);
 	}
 	catch (const MyException::overflow_error & e){
-		std::cerr << ANSI_COLOR_YELLOW << "Line " << Parser::line << ": Error: " << e.what() << std::endl;
+		std::cerr << ANSI_COLOR_YELLOW << "Line " << Parser::line << ": Error: " << e.what() << COLOR_RESET << std::endl;
 	}
 	return (op);
 }

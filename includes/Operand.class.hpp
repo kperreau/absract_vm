@@ -123,7 +123,7 @@ class Operand : public IOperand
 			if (std::stold(rhs.toString()) == 0)
 			{
 				ss << "Divizion by zero";
-				throw std::invalid_argument(ss.str());
+				throw MyException::invalid_argument(ss.str());
 				return (NULL);
 			}
 			type = (this->getType() > rhs.getType()) ? this->getType() : rhs.getType();
@@ -142,7 +142,7 @@ class Operand : public IOperand
 			if (std::stold(rhs.toString()) == 0)
 			{
 				ss << "Divizion by zero";
-				throw std::invalid_argument(ss.str());
+				throw MyException::invalid_argument(ss.str());
 				return (NULL);
 			}
 			type = (this->getType() > rhs.getType()) ? this->getType() : rhs.getType();
@@ -151,6 +151,31 @@ class Operand : public IOperand
 			else
 				ss << std::stod(this->toString()) * std::stod(rhs.toString());
 			return (this->_factory->createOperand(type, ss.str()));
+		}
+
+		bool					operator<(IOperand const & rhs) const
+		{
+			eOperandType		type;
+
+			type = (this->getType() > rhs.getType()) ? this->getType() : rhs.getType();
+			if (type < Float)
+				return (std::stoi(this->toString()) < std::stoi(rhs.toString()));
+			else
+				return (std::stod(this->toString()) < std::stod(rhs.toString()));
+			return (false);
+		}
+
+		bool					operator==(IOperand const & rhs) const
+		{
+			eOperandType		type;
+
+			if (this->getType() != rhs.getType())
+				return (false);
+			if (this->getType() < Float)
+				return (std::stoi(this->toString()) == std::stoi(rhs.toString()));
+			else
+				return (std::stod(this->toString()) == std::stod(rhs.toString()));
+			return (false);
 		}
 
 		std::string const &		toString(void) const
