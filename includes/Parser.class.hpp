@@ -14,6 +14,7 @@
 # define PARSER_CLASS_HPP
 # include "IOperand.class.hpp"
 # include "FactoryOperand.class.hpp"
+# include "MyExceptions.class.hpp"
 # include <iostream>
 # include <string>
 # include <list>

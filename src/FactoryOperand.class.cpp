@@ -36,7 +36,15 @@ FactoryOperand const & FactoryOperand::operator=(FactoryOperand const & rhs)
 
 IOperand const * FactoryOperand::createOperand(eOperandType type, std::string const & value) const
 {
-	return((*this.*(_create.at(type)))(value));
+	IOperand const *	op = NULL;
+	
+	try {
+		op = (*this.*(_create.at(type)))(value);
+	}
+	catch (const MyException::overflow_error & e){
+		std::cerr << ANSI_COLOR_YELLOW << "Line " << Parser::line << ": Error: " << e.what() << std::endl;
+	}
+	return (op);
 }
 
 FactoryOperand::~FactoryOperand(void)

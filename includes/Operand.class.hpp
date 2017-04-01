@@ -16,6 +16,8 @@
 # include <sstream>
 # include <iomanip>
 # include <cstdlib>
+# include <climits>
+# include <cfloat>
 # include "IOperand.class.hpp"
 # include "FactoryOperand.class.hpp"
 # include "Parser.class.hpp"
@@ -28,6 +30,14 @@ class Operand : public IOperand
 		Operand(eOperandType type, std::string const & value, int precision, FactoryOperand const * factory)
 		: _type(type), _str(value), _precision(precision), _factory(factory)
 		{
+			std::stringstream	ss_err;
+
+			if (this->CheckOverflow())
+			{
+				ss_err << "Overflow or underflow";
+				throw MyException::overflow_error(ss_err.str());
+				return ;
+			}
 			std::stringstream	ss;
 			std::regex			regex("0*$");
 			if (type < Float)
@@ -112,7 +122,8 @@ class Operand : public IOperand
 
 			if (std::stold(rhs.toString()) == 0)
 			{
-				std::cerr << "Line " << Parser::line << ": Divizion by zero." << std::endl;
+				ss << "Divizion by zero";
+				throw std::invalid_argument(ss.str());
 				return (NULL);
 			}
 			type = (this->getType() > rhs.getType()) ? this->getType() : rhs.getType();
@@ -130,7 +141,8 @@ class Operand : public IOperand
 
 			if (std::stold(rhs.toString()) == 0)
 			{
-				std::cerr << "Line " << Parser::line << ": Divizion by zero." << std::endl;
+				ss << "Divizion by zero";
+				throw std::invalid_argument(ss.str());
 				return (NULL);
 			}
 			type = (this->getType() > rhs.getType()) ? this->getType() : rhs.getType();
@@ -144,6 +156,45 @@ class Operand : public IOperand
 		std::string const &		toString(void) const
 		{
 			return (this->_str);
+		}
+		
+		bool					CheckOverflow(void) const
+		{
+			try {
+				switch (this->_type)
+				{
+					case Int8:
+						if (std::stoi(this->_str) > SCHAR_MAX
+							|| std::stoi(this->_str) < SCHAR_MIN)
+							return (1);
+						break ;
+					case Int16:
+						if (std::stoi(this->_str) > SHRT_MAX
+							|| std::stoi(this->_str) < SHRT_MIN)
+							return (1);
+						break ;
+					case Int32:
+						if (std::stol(this->_str) > INT_MAX
+							|| std::stol(this->_str) < INT_MIN)
+							return (1);
+						break ;
+					case Float:
+						if (std::stod(this->_str) > FLT_MAX
+							|| std::stod(this->_str) < FLT_MIN)
+							return (1);
+						break ;
+					case Double:
+						if (std::stold(this->_str) > DBL_MAX
+							|| std::stold(this->_str) < DBL_MIN)
+							return (1);
+						break ;
+				}
+			}
+			catch (...)
+			{
+				return (1);
+			}
+			return (0);
 		}
 		
 	private:

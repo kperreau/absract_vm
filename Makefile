@@ -29,7 +29,7 @@ SRC = $(patsubst %, $(SRCDIR)/%, $(CFILES))
 OBJ = $(SRC:.cpp=.o) $(MAIN:.cpp=.o)
 
 HFILES = IOperand.class.hpp Operand.class.hpp FactoryOperand.class.hpp \
-	Parser.class.hpp
+	Parser.class.hpp MyExceptions.class.hpp
 
 HEADERS = $(patsubst %, $(INCLUDESDIR)/%, $(HFILES))
 
