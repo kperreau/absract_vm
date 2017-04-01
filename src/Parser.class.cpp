@@ -34,6 +34,7 @@ Parser::Parser(std::string const & str)
 	this->_instruction["print"] = &Parser::_print;
 	this->_instruction["dump"] = &Parser::_dump;
 	this->_instruction["assert"] = &Parser::_assert;
+	this->_instruction["reset"] = &Parser::_reset;
 
 	this->_type["int8"] = Int8;
 	this->_type["int16"] = Int16;
@@ -58,7 +59,7 @@ Parser::Parser(std::string const & str)
 						(*this.*(_instruction.at(match[1].str())))(match[2]);
 					}
 					catch (const MyException::invalid_argument & e){
-						std::cerr << ANSI_COLOR_YELLOW << "Line " << Parser::line << ": Error: " << e.what() << std::endl;
+						std::cerr << ANSI_COLOR_YELLOW << "Line " << Parser::line << ": Error: " << match[1].str() << " " << e.what() << std::endl;
 					}
 				}
 				else
@@ -126,7 +127,7 @@ void					Parser::_add(std::string const & value)
 	error = 0;
 	if (regex_match(value, check))
 	{
-		err << "Add too much parameters";
+		err << "Too much parameters";
 		throw std::invalid_argument(err.str());
 		error = 1;
 	}
@@ -162,7 +163,7 @@ void					Parser::_sub(std::string const & value)
 	error = 0;
 	if (regex_match(value, check))
 	{
-		err << "Sub too much parameters";
+		err << "Too much parameters";
 		throw std::invalid_argument(err.str());
 		error = 1;
 	}
@@ -198,7 +199,7 @@ void					Parser::_mul(std::string const & value)
 	error = 0;
 	if (regex_match(value, check))
 	{
-		err << "Mul too much parameters";
+		err << "Too much parameters";
 		throw std::invalid_argument(err.str());
 		error = 1;
 	}
@@ -234,7 +235,7 @@ void					Parser::_div(std::string const & value)
 	error = 0;
 	if (regex_match(value, check))
 	{
-		err << "Div too much parameters";
+		err << "Too much parameters";
 		throw std::invalid_argument(err.str());
 		error = 1;
 	}
@@ -275,7 +276,7 @@ void					Parser::_mod(std::string const & value)
 	error = 0;
 	if (regex_match(value, check))
 	{
-		err << "Mod too much parameters";
+		err << "Too much parameters";
 		throw std::invalid_argument(err.str());
 		error = 1;
 	}
@@ -313,7 +314,7 @@ void					Parser::_pop(std::string const & value)
 	error = 0;
 	if (regex_match(value, check))
 	{
-		err << "Pop too much parameters";
+		err << "Too much parameters";
 		throw std::invalid_argument(err.str());
 		error = 1;
 	}
@@ -339,7 +340,7 @@ void					Parser::_exit(std::string const & value)
 
 	if (regex_match(value, check))
 	{
-		err << "Exit too much parameters";
+		err << "Too much parameters";
 		throw std::invalid_argument(err.str());
 		return ;
 	}
@@ -357,7 +358,7 @@ void					Parser::_print(std::string const & value)
 	error = 0;
 	if (regex_match(value, check))
 	{
-		err << "Print too much parameters";
+		err << "Too much parameters";
 		throw std::invalid_argument(err.str());
 		error = 1;
 	}
@@ -391,7 +392,7 @@ void					Parser::_dump(std::string const & value)
 	error = 0;
 	if (regex_match(value, check))
 	{
-		err << "Dump too much parameters";
+		err << "Too much parameters";
 		throw std::invalid_argument(err.str());
 		error = 1;
 	}
@@ -417,30 +418,60 @@ void					Parser::_assert(std::string const & value)
 	IOperand const *	val;
 	std::stringstream	err;
 
+	try {
+		val = this->_check_value(value);
+	}
+	catch (const std::invalid_argument & e){
+		std::cerr << ANSI_COLOR_YELLOW << "Line " << Parser::line << ": Error: assert " << e.what() << std::endl;
+		return ;
+	}
+	
 	if (this->_stack.empty())
 	{
 		err << "Stack is empty";
 		throw std::invalid_argument(err.str());
 		return ;
 	}
-
-	try {
-		val = this->_check_value(value);
-	}
-	catch (const std::invalid_argument & e){
-		std::cerr << ANSI_COLOR_YELLOW << "Line " << Parser::line << ": Error: ASSERT " << e.what() << std::endl;
-	}
-	
 	if (this->_stack.front()->getType() != val->getType())
 	{
-		err << "Assert: Wrong type";
+		err << "Wrong type";
 		throw std::invalid_argument(err.str());
 	}
 	if (this->_stack.front()->toString() != val->toString())
 	{
-		err << "Assert: Wrong value";
+		err << "Wrong value";
 		throw std::invalid_argument(err.str());
 	}
+	return ;
+}
+
+void					Parser::_reset(std::string const & value)
+{
+	std::list<IOperand const *>::iterator	it;
+	std::regex								check("[^ \t]+");
+	int										error;
+	std::stringstream						err;
+
+	error = 0;
+	if (regex_match(value, check))
+	{
+		err << "Too much parameters";
+		throw std::invalid_argument(err.str());
+		error = 1;
+	}
+	if (this->_stack.empty())
+	{
+		err << "Stack is empty";
+		throw std::invalid_argument(err.str());
+		error = 1;
+	}
+	
+	if (error)
+		return ;
+	
+	for (it = this->_stack.begin(); it != this->_stack.end(); it++)
+		delete *it;
+	this->_stack.clear();
 	return ;
 }
 
